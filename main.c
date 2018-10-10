@@ -6,17 +6,22 @@ int main (void) {
 
   FILE *fp, *fptmp;
   int choix, id[10];
-  char c, prenom[10], nom[10], email[30], tel[10];
-  int exit = 0, count = 6, i, codeId;
+  char prenom[10], nom[10], email[30], tel[10];
+  int exit = 0, i, codeId, count = 5;
   
   while(exit != 1) {
 
-	fp = fopen("repertoire.txt", "a+");
-  	
-   	if (fp == NULL) { 
-        freopen("repertoire.txt", "wb", fp); 
-   	} 
-  	
+	if(choix != 1) {
+		printf("nombre de ligne dans le repertoire : ");
+		scanf("%d", &count);	
+	}
+		
+ 	fp = fopen("repertoire.txt", "a+");
+ 	
+	if(fp == NULL) {
+		freopen("repertoire.txt", "a+", fp);
+	}
+		
 	printf("===================== MENU =========================\n (1) - Afficher le repertoire\n (2) - Ajouter une personne au repertoire\n (3) - Rechercher une personne dans le repertoire\n (4) - Supprimer une personne du repertoire\n (5) - Supprimer tout le repertoire\n (6) - Quitter\n====================================================\n");
   	scanf("%d", &choix);	
 
@@ -24,7 +29,7 @@ int main (void) {
   		
   	  	printf("==================== REPERTOIRE ====================");
 	  	
-	  	for (i=0; i<count; i++) {
+	  	for (i=0; i < count; i++) {
   		
 			fscanf(fp, "%d", &id[i]); 
 			fscanf(fp, "%s", &nom);
@@ -38,9 +43,7 @@ int main (void) {
 	 
 	 	printf("\n====================================================\n\n\n");
 	 
-  	}
-  	   
-  	if(choix == 2) {
+  	} else if(choix == 2) {
   	
   		printf("============== AJOUT D\'UN UTILISATEUR ==============\nIdentifiant: ");
   		scanf("%d", &id);
@@ -60,19 +63,17 @@ int main (void) {
   		
   		fprintf(fp, "%d    %s    %s    %s    %s", id, nom, prenom, tel, email);
 	
-  	}
-  
-  	if(choix == 3) {
+  	} else if(choix == 3) {
   
   
   		printf("============ RECHERCHER UN UTILISATEUR =============");
 	  	
 	  	
-		printf("\n\n - Saisir identifiant de la personne : ");
+		printf("\n\n - Saisir l\'identifiant de la personne : ");
  		
 		scanf("%d", &codeId);
 
-		for (i=0; i<count; i++) {
+		for (i=0; i < count; i++) {
   		
 			fscanf(fp, "%d", &id[i]); 
 			fscanf(fp, "%s", &nom);
@@ -89,9 +90,7 @@ int main (void) {
 	  	
 	 	printf("\n====================================================\n\n\n");  
 	  
-  	}
-  
-  	if(choix == 4) {
+  	} else if(choix == 4) {
   		
   		printf("============ SUPPRIMER UN UTILISATEUR =============");
 	  	
@@ -104,9 +103,9 @@ int main (void) {
   	
    		if (fptmp == NULL) { 
         	freopen("repertoire_tmp.txt", "wb", fptmp); 
-   		} 
+   		}
 		  
-		for (i=0; i<count; i++) {
+		for (i=0; i < count; i++) {
   		
 			fscanf(fp, "%d", &id[i]); 
 			fscanf(fp, "%s", &nom);
@@ -125,29 +124,28 @@ int main (void) {
 	  	
 	  	remove("repertoire.txt");
 	  	rename("repertoire_tmp.txt", "repertoire.txt");
+	  	
+	  	printf("   - L\'utilisateur a bien ete supprimer");
 	  		  	
 	 	printf("\n====================================================\n\n\n");  
   		
- 	}
- 	
- 	if(choix == 5) {
+ 	} else if(choix == 5) {
  		int c;
   		printf("\n  [!] Etez-vous sure de vouloir vider le repertoire ? \n\n   - (1) -> OUI\n   - (0) -> NON\n\n");
   		scanf("%d", &c); 
   		if(c == 1) {
-  			remove("repertoire.txt");
+  			fclose(fopen("repertoire.txt", "w"));
 		}
- 	}
- 	
- 	if(choix == 6) {
+ 	} else if(choix == 6) {
   		exit = 1;
- 	}
+ 	} else {
+ 		printf("\n[!] Erreur veuillez entrez un nombre entre (1 et 6)\n\n");
+	}
  	
   	fclose(fp);
   	
   }
-  
-  
+ 
   return 0;
   
 }
